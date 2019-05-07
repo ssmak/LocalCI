@@ -70,7 +70,8 @@ const cp = require('child_process');
         for(const event of events) {
           term.green(`[${new Date().toLocaleString()}] PushEvent trigged.\n`);
 
-          const subprocess = cp.spawn('sh', [scriptPath], {
+          const subprocess = cp.spawn(scriptPath, [], {
+            shell: true,
             detached: true,
             stdio: 'ignore'
           });
