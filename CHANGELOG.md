@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v1.0.2] - 2019-05-07
+### Fixed
+- Module `terminal-kit` does not work on Windows 7, so compatible mode is introduced by patching the `terminal-kit` module.
+
 ## [v1.0.1] - 2019-05-07
 ### Changed
 - Update README.md
