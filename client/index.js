@@ -3,7 +3,8 @@
 const path = require('path');
 const fs = require('fs');
 const appInfo = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'package.json')));
-const term = require('terminal-kit').terminal;
+const argv = require('yargs').argv;
+const term = argv.compatible ? require('./patch.js') : require('terminal-kit').terminal;
 const rp = require('request-promise');
 const cp = require('child_process');
 
@@ -12,11 +13,17 @@ const cp = require('child_process');
     // Clear console
     term.clear();
 
-    term.yellow.bold(`${appInfo.name} (client)\n`);
+    term.magenta(`${appInfo.name} (client)\n`);
     term.yellow(`Version: ${appInfo.version}\n`);
     term.yellow(`Description: ${appInfo.description}\n`);
     term.yellow(`Author: ${appInfo.author}\n`);
     term.yellow(`License: ${appInfo.license}\n\n`);
+
+    // Patch `termminal-kit` method(s) due to Windows 7 not fully support `terminal-kit`
+  	if(argv.compatible) {
+      term.red('Compatible is enabled.\n\n');
+  	}
+
     // Ask for webhook url
     term.cyan(`${appInfo.name} (server) Url? `);
     const webhookUrl = await term.inputField().promise;
@@ -41,7 +48,7 @@ const cp = require('child_process');
     term.cyan(`\nScript to run? `);
     const scriptPath = await term.inputField().promise;
     term.white(`\nScript: ${scriptPath}\n`);
-    term('\n');
+    term.white('\n');
     term.green(`\nListen \`Push\` event for Git repository ${repositoryUrl} from ${appInfo.name} (server) ${webhookUrl} on branch ${branch}..\n`);
 
     // Cron job
