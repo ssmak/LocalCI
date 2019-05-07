@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [Unreleased] - 2019-05-07
+### Changed
+- Update README.md
+
 ## [v1.0.0] - 2019-05-07
 ### Added
 - Add helper script for killing process by port number.
