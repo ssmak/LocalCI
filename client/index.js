@@ -45,9 +45,17 @@ const cp = require('child_process');
       term.backDelete();
     });
     // Ask for build action
-    term.cyan(`\nScript to run? `);
-    const scriptPath = await term.inputField().promise;
-    term.white(`\nScript: ${scriptPath}\n`);
+    let scriptPath = null;
+    while(scriptPath === null) {
+      term.cyan(`\nScript to run? `);
+      scriptPath = await term.inputField().promise;
+      term.white(`\nScript: ${scriptPath}\n`);
+      // Check if file exists
+      if(!fs.existsSync(scriptPath)) {
+        term.red('*File not found in the path.');
+        scriptPath = null;
+      }
+    }
     term.white('\n');
     term.green(`\nListen \`Push\` event for Git repository ${repositoryUrl} from ${appInfo.name} (server) ${webhookUrl} on branch ${branch}..\n`);
 

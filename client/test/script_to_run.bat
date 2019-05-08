@@ -4,5 +4,4 @@ cd i:/tmp/blank
 git reset --hard
 git config http.sslVerify false
 git pull
-npm install
-npm start
+npm install && npm start

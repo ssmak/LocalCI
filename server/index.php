@@ -24,7 +24,7 @@ if($_GET['action'] === 'push') {
 			$projectFolder = dirname(__FILE__).'/.cache/'.$projectName;
 			// Make group folder if not exist
 			if(!file_exists($projectFolder)) {
-				mkdir($projectFolder);
+				mkdir($projectFolder, 0777, true);
 			}
 			file_put_contents($projectFolder.'/'.time(), json_encode($payload));
 		}
