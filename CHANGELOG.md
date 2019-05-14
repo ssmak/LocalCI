@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.0.5] - 2019-05-14
+## [1.0.6] - 2019-05-14
 ### Added
 - Support run as globally npm-cli.
 
