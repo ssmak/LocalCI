@@ -37,7 +37,7 @@ npm install -g local-ci
 
 2. Start versioning for directory
 ```bash
-local-ci
+localci
 ```
 
 ## License
