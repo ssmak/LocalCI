@@ -3,6 +3,9 @@
 // ini_set('display_errors', 1);
 // error_reporting(E_ALL);
 
+/*
+ * Define your symmetric key here (Share between LocalCI client & server)
+ */
 define('SECRET', '34f9b51db8c17845c993ef215c03fa64');
 
 /*

@@ -1,63 +1,78 @@
+#!/usr/bin/env node
+ 
 'use strict';
 
 const path = require('path');
 const fs = require('fs');
 const appInfo = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'package.json')));
 const argv = require('yargs').argv;
-const term = argv.compatible ? require('./patch.js') : require('terminal-kit').terminal;
+const chalk = require('chalk');
+const figlet = require('figlet');
+const inquirer = require('inquirer');
 const rp = require('request-promise');
 const cp = require('child_process');
 
-(async function() {
+(async function () {
   try {
-    // Clear console
-    term.clear();
+    // Clear up console
+    console.clear();
 
-    term.magenta(`${appInfo.name} (client)\n`);
-    term.yellow(`Version: ${appInfo.version}\n`);
-    term.yellow(`Description: ${appInfo.description}\n`);
-    term.yellow(`Author: ${appInfo.author}\n`);
-    term.yellow(`License: ${appInfo.license}\n\n`);
-
-    // Patch `termminal-kit` method(s) due to Windows 7 not fully support `terminal-kit`
-  	if(argv.compatible) {
-      term.red('Compatible is enabled.\n\n');
-  	}
+    /*
+     * Print application information
+     */
+    console.log(chalk.yellow(figlet.textSync(appInfo.name, {
+    })));
+    console.log(chalk.yellow(appInfo.description), '\n');
+    console.log(chalk.yellow(`Version: ${appInfo.version}`));
+    console.log(chalk.yellow(`Repository: ${appInfo.repository.url}`));
+    console.log(chalk.yellow(`Author: ${ typeof(appInfo.author.name) === 'string' ? appInfo.author.name : appInfo.author}`));
+    console.log(chalk.yellow(`License: ${appInfo.license}`));
+    console.log('\n');
 
     // Ask for webhook url
-    term.cyan(`${appInfo.name} (server) Url? `);
-    const webhookUrl = await term.inputField().promise;
-    term.white(`\nPull event(s) from ${webhookUrl}\n`);
+    // console.log(chalk.cyan(`${appInfo.name} (server) Url? `));
+    const { webhookUrl } = await inquirer.prompt([{
+      type: 'input',
+      message: chalk.cyan(`${appInfo.name} (server) Url: `),
+      name: 'webhookUrl'
+    }]);
+    console.log(chalk.white(`\nPull event(s) from ${webhookUrl}\n`));
     // Ask for repository url
-    term.cyan('Repository Url? ');
-    const repositoryUrl = await term.inputField().promise;
-    term.white(`\nWatch on ${repositoryUrl}\n`);
+    const { repositoryUrl } = await inquirer.prompt([{
+      type: 'input',
+      message: chalk.cyan('Repository Url: '),
+      name: 'repositoryUrl'
+    }]);
+    console.log(chalk.white(`\nWatch on ${repositoryUrl}\n`));
     // Ask for branch to watch
-    term.cyan('Branch? ');
-    const branch = await term.inputField().promise;
-    term.white(`\nWatched branch ${branch}\n`);
-    // Set terminal window title
-    term.windowTitle(`${repositoryUrl} (${branch})`);
+    const { branch } = await inquirer.prompt([{
+      type: 'input',
+      message: chalk.cyan('Branch: '),
+      name: 'branch'
+    }]);
+    console.log(chalk.white(`\nWatched branch ${branch}\n`));
     // Ask for secret (LocalCI server)
-    term.cyan('LocalCI (server) secret? ');
-    const secret = await term.inputField().promise;
-    secret.split('').map(() => {
-      term.backDelete();
-    });
+    const { secret } = await inquirer.prompt([{
+      type: 'password',
+      message: chalk.cyan('LocalCI (server) secret: '),
+      name: 'secret'
+    }]);
     // Ask for build action
     let scriptPath = null;
     while(scriptPath === null) {
-      term.cyan(`\nScript to run? `);
-      scriptPath = await term.inputField().promise;
-      term.white(`\nScript: ${scriptPath}\n`);
+      scriptPath = (await inquirer.prompt([{
+        type: 'input',
+        message: chalk.cyan('Script to run: '),
+        name: 'scriptPath'
+      }])).scriptPath;
+      console.log(chalk.white(`\nScript: ${scriptPath}\n`));
       // Check if file exists
       if(!fs.existsSync(scriptPath)) {
-        term.red('*File not found in the path.');
+        console.log(chalk.red('*File not found in the path.'));
         scriptPath = null;
       }
     }
-    term.white('\n');
-    term.green(`\nListen \`Push\` event for Git repository ${repositoryUrl} from ${appInfo.name} (server) ${webhookUrl} on branch ${branch}..\n`);
+    console.log(chalk.green(`\n\nListen \`Push\` event for Git repository ${repositoryUrl} from ${appInfo.name} (server) ${webhookUrl} on branch ${branch}..\n`));
 
     // Cron job
     const cronjob = async() => {
@@ -76,7 +91,7 @@ const cp = require('child_process');
       if(response && response.length > 0) {
         const events = JSON.parse(response);
         for(const event of events) {
-          term.green(`[${new Date().toLocaleString()}] PushEvent trigged.\n`);
+          console.log(chalk.green(`[${new Date().toLocaleString()}] PushEvent trigged.\n`));
 
           const subprocess = cp.spawn(scriptPath, [], {
             shell: true,
@@ -94,8 +109,7 @@ const cp = require('child_process');
       await cronjob()
     }, 5000);
   } catch(e) {
-    console.error(e);
+    console.log(chalk.red(e));
   } finally {
-    // process.exit(0);
   }
 }());
