@@ -1,6 +1,6 @@
 {
-  "name": "LocalCI",
-  "version": "1.0.4",
+  "name": "localci",
+  "version": "1.0.5",
   "description": "A continuous integration(CI) solution for local application or service which is behind a firewall.",
   "main": "index.js",
   "scripts": {

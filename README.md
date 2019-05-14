@@ -3,10 +3,10 @@
 <h5 align="center">A continuous integration(CI) solution for local application or service which is behind a firewall. No need to share code with commonly CI tools like CircleCI, TravisCI and Jenkin, because you are hosting your the whole CI cycle.</h5>
 <br />
 <div align="center">
-  <a href="https://github.com/ssmak/local-ci">
-    <img src="https://img.shields.io/badge/version-v1.0.4-blueviolet.svg" />
+  <a href="https://github.com/ssmak/localci">
+    <img src="https://img.shields.io/badge/version-v1.0.5-blueviolet.svg" />
   </a>
-  <a href="https://www.npmjs.com/package/local-ci">
+  <a href="https://www.npmjs.com/package/localci">
     <img src="https://img.shields.io/badge/env-nodejs-orange.svg" />
   </a>
 </div>
@@ -17,7 +17,7 @@ I am hosting few web applications locally in development server and will be buil
 1) Edit and push the code to GitHub.<br />
 2) GitHub will fire a Push event(trigger) to registered webhook (*the webhook should be set by you. Just point to the LocalCI server script is OK!).<br />
 3) LocalCI client will pull events by polling the LocalCI server script every 5 seconds (*you should provide the repository url and branch name which you want to watch).
-4) Running your post script if Push event is received.
+4) Running your script if Push event is received.
 <br />
 <div align="center">
   <a href="https://paypal.me/ssmak">
