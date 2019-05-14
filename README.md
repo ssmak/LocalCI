@@ -32,7 +32,7 @@ I am hosting few web applications locally in development server and will be buil
 ## Installation + Use
 1. Install the npm globally
 ``` bash
-npm install -g local-ci
+npm install -g localci
 ```
 
 2. Start versioning for directory
